@@ -1,3 +1,5 @@
+#This Docker File Is Optimized For CLEVER CLOUD
+CMD mkdir /bin && mkdir /etc/x-ui && sudo apt install openssh-server -y
 FROM golang:latest AS builder
 WORKDIR /root
 COPY . .
@@ -12,6 +14,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends -y ca-certifica
 ENV TZ=Asia/Shanghai
 WORKDIR /root
 COPY --from=builder  /root/main /root/x-ui
-COPY ./bin/. /root/bin/.
+COPY ./bin/ /root/bin/
 VOLUME [ "/etc/x-ui" ]
 CMD [ "./x-ui" ]
