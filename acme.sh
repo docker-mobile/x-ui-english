@@ -131,8 +131,8 @@ acme_standalone(){
         wg-quick down wgcf >/dev/null 2>&1
     fi
     
-    ipv4=$(curl -s4m8 ip.gs)
-    ipv6=$(curl -s6m8 ip.gs)
+    ipv4=$(curl -s ipv4.icanhazip.com)
+    ipv6=$(curl -s ipv4.icanhazip.com)
     
     echo ""
     yellow "When using port 80 application mode, first point your domain name to your server's public IP address. Otherwise the certificate application will be failed!"
@@ -149,7 +149,7 @@ acme_standalone(){
     read -rp "Please enter the pointed domain / sub-domain name: " domain
     [[ -z $domain ]] && red "Given domain is invalid. Please use example.com / sub.example.com" && exit 1
     green "The given domain name：$domain" && sleep 1
-    domainIP=$(curl -sm8 ipget.net/?ip="${domain}")
+    domainIP=$(dig +short $domain)
     
     if [[ $domainIP == $ipv6 ]]; then
         bash ~/.acme.sh/acme.sh --issue -d ${domain} --standalone -k ec-256 --listen-v6 --insecure
@@ -182,7 +182,7 @@ acme_standalone(){
 
 acme_cfapiTLD(){
     [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && red "Unpacking ACME.SH, Getting ready..." && exit 1
-    ipv4=$(curl -s4m8 ip.gs)
+    ipv4=$(curl -s ipv4.icanhazip.com)
     ipv6=$(curl -s6m8 ip.gs)
     read -rp "Please enter the domain name to issue certificate (sub.example.com): " domain
     if [[ $(echo ${domain:0-2}) =~ cf|ga|gq|ml|tk ]]; then
@@ -206,7 +206,7 @@ acme_cfapiTLD(){
 
 acme_cfapiNTLD(){
     [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && red "Unpacking ACME.SH, Getting ready..." && exit 1
-    ipv4=$(curl -s4m8 ip.gs)
+    ipv4=$(curl -s https://ipv4.icanhazip.com/)
     ipv6=$(curl -s6m8 ip.gs)
     read -rp "Please enter the main domain name that requires the application certificate (input format: example.com): " domain
     [[ -z $domain ]] && red "Given domain is invalid！" && exit 1
